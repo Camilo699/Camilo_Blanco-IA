@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html class="dark" lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0" name="viewport"/>
+  <meta content="web_standard" name="shell-type"/>
+  <title>GitFast - Generador de Comandos Git | Grupo 32</title>
+
+  <!-- Google Fonts & Icons -->
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface": "#0f131c",
+            "surface-dim": "#0f131c",
+            "surface-bright": "#353942",
+            "surface-container-lowest": "#0a0e16",
+            "surface-container-low": "#181c24",
+            "surface-container": "#1c2028",
+            "surface-container-high": "#262a33",
+            "surface-container-highest": "#31353e",
+            "on-surface": "#dfe2ee",
+            "on-surface-variant": "#bdc8d1",
+            "inverse-surface": "#dfe2ee",
+            "inverse-on-surface": "#2c3039",
+            "outline": "#87929a",
+            "outline-variant": "#3e484f",
+            "surface-tint": "#7bd0ff",
+            "primary": "#8ed5ff",
+            "on-primary": "#00354a",
+            "primary-container": "#38bdf8",
+            "on-primary-container": "#004965",
+            "secondary": "#4edea3",
+            "on-secondary": "#003824",
+            "secondary-container": "#00a572",
+            "on-secondary-container": "#00311f",
+            "tertiary": "#ffc174",
+            "on-tertiary": "#472a00",
+            "tertiary-container": "#f59e0b",
+            "on-tertiary-container": "#613b00",
+            "error": "#ffb4ab",
+            "on-error": "#690005",
+            "error-container": "#93000a",
+            "on-error-container": "#ffdad6",
+            "background": "#0f131c",
+            "on-background": "#dfe2ee"
+          },
+          fontFamily: {
+            "body": ["Geist", "system-ui", "sans-serif"],
+            "code": ["JetBrains Mono", "monospace"]
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      font-family: 'Geist', system-ui, -apple-system, sans-serif;
+    }
+    code, pre, .font-code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    /* Estilos de barra de desplazamiento moderna */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f131c;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #262a33;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #38bdf8;
+    }
+    /* Suavidad en transiciones de pestañas */
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    /* Toque táctil móvil */
+    .touch-target {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  </style>
+</head>
+
+<body class="bg-background text-on-surface antialiased selection:bg-primary-container selection:text-on-primary-container min-h-screen flex flex-col">
+
+  <!-- CABECERA PRINCIPAL SUPERIOR (RESPONSIVA) -->
+  <header class="fixed top-0 left-0 w-full z-50 bg-surface-container-lowest/95 backdrop-blur-xl border-b border-outline-variant/30">
+    <!-- Fila 1: Logo, Título, Estado y Equipo -->
+    <div class="w-full px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-between gap-3">
+      <!-- Marca y Logo -->
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-primary-container to-secondary flex items-center justify-center text-on-primary shadow-md">
+          <span class="material-symbols-outlined text-[22px]">terminal</span>
+        </div>
+        <div class="flex flex-col">
+          <div class="flex items-center gap-2">
+            <span class="font-semibold text-lg tracking-tight text-on-surface">GitFast</span>
+            <span class="px-2 py-0.5 rounded text-[10px] bg-tertiary-container/20 text-tertiary font-code border border-tertiary/30 uppercase font-semibold">Grupo 32</span>
+          </div>
+          <span class="text-[11px] text-on-surface-variant font-code hidden sm:inline">IA Generativa: del Prompt al Producto</span>
+        </div>
+      </div>
+
+      <!-- Estado Seguro y Enlace a Integrantes -->
+      <div class="flex items-center gap-2 sm:gap-4">
+        <div class="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-low text-secondary text-xs font-code border border-secondary/20">
+          <span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+          <span>100% Offline • Cero APIs Privadas</span>
+        </div>
+
+        <button onclick="switchTab('about')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-bright text-xs text-on-surface transition-colors cursor-pointer border border-outline-variant/40" title="Ver integrantes del equipo">
+          <span class="material-symbols-outlined text-[16px] text-primary">groups</span>
+          <span class="font-medium">Equipo</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Fila 2: Barra de Navegación de Pestañas (Desplazable en móvil) -->
+    <div class="w-full px-4 sm:px-6 lg:px-8 flex items-center justify-between overflow-x-auto border-t border-outline-variant/20 py-1">
+      <nav class="flex items-center gap-1 sm:gap-2 whitespace-nowrap" id="main-navigation">
+        <button onclick="switchTab('generator')" id="tab-btn-generator" class="nav-tab active px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 bg-surface-container-high text-primary border-b-2 border-primary">
+          <span class="material-symbols-outlined text-[16px]">code</span>
+          <span>Generador de Comandos</span>
+        </button>
+
+        <button onclick="switchTab('favorites')" id="tab-btn-favorites" class="nav-tab px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all flex items-center gap-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container">
+          <span class="material-symbols-outlined text-[16px] text-tertiary">star</span>
+          <span>Favoritos</span>
+          <span id="fav-badge-count" class="px-1.5 py-0.2 rounded-full text-[10px] bg-surface-container-highest text-tertiary font-code">0</span>
+        </button>
+
+        <button onclick="switchTab('emergency')" id="tab-btn-emergency" class="nav-tab px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all flex items-center gap-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container">
+          <span class="material-symbols-outlined text-[16px] text-error">sos</span>
+          <span>Guía de Rescate</span>
+        </button>
+      </nav>
+
+      <div class="hidden lg:flex items-center gap-2 text-xs font-code text-on-surface-variant pl-4">
+        <span class="material-symbols-outlined text-[15px] text-secondary">verified_user</span>
+        <span>Modo Seguro Activo</span>
+      </div>
+    </div>
+
+    <!-- Ticker de advertencia de seguridad (Del PRD: no ejecuta en consola) -->
+    <div class="w-full bg-surface-container-low px-4 sm:px-6 lg:px-8 py-1 flex items-center justify-between border-t border-outline-variant/20 text-[11px] sm:text-xs text-on-surface-variant">
+      <div class="flex items-center gap-1.5 truncate">
+        <span class="material-symbols-outlined text-[14px] text-secondary shrink-0">shield</span>
+        <span class="truncate"><strong class="text-on-surface font-medium">Modo Seguro:</strong> Los comandos no se ejecutan directamente en tu terminal. Copia, inspecciona y pega.</span>
+      </div>
+      <div class="hidden sm:flex items-center gap-3 font-code shrink-0 pl-2">
+        <span class="flex items-center gap-1"><kbd class="px-1 py-0.5 bg-surface-container-highest rounded text-on-surface">Esc</kbd> limpiar</span>
+        <span class="flex items-center gap-1"><kbd class="px-1 py-0.5 bg-surface-container-highest rounded text-on-surface">Ctrl+C</kbd> copiar</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL (ESPACIADO PARA HEADER FIJO) -->
+  <main class="flex-1 w-full pt-28 sm:pt-32 pb-12 px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+
+    <!-- VISTA 1: GENERADOR DE COMANDOS (DEFAULT) -->
+    <section id="view-generator" class="tab-content active">
+      <div class="text-center py-12">
+        <p class="text-primary font-code text-sm">Cargando módulos del generador...</p>
+      </div>
+    </section>
+
+    <!-- VISTA 2: FAVORITOS & SNIPPETS -->
+    <section id="view-favorites" class="tab-content">
+      <div class="text-center py-12">
+        <p class="text-tertiary font-code text-sm">Cargando biblioteca de favoritos...</p>
+      </div>
+    </section>
+
+    <!-- VISTA 3: GUÍA DE RESCATE Y EMERGENCIAS -->
+    <section id="view-emergency" class="tab-content">
+      <div class="text-center py-12">
+        <p class="text-error font-code text-sm">Cargando guía de rescate...</p>
+      </div>
+    </section>
+
+    <!-- VISTA 4: ACERCA DE / EQUIPO -->
+    <section id="view-about" class="tab-content">
+      <div class="text-center py-12">
+        <p class="text-primary font-code text-sm">Cargando información del equipo...</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- PIE DE PÁGINA -->
+  <footer class="w-full bg-surface-container-lowest py-6 border-t border-outline-variant/20 text-xs text-on-surface-variant">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <span class="font-semibold text-on-surface">GitFast</span>
+        <span>•</span>
+        <span>Asistente de Control de Versiones para Laboratorio</span>
+      </div>
+      <div class="flex items-center gap-4 font-code text-[11px]">
+        <span>Grupo [32]</span>
+        <span>•</span>
+        <span>Ingeniería de Sistemas</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Navegación fluida de pestañas
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-tab').forEach(el => {
+        el.classList.remove('active', 'bg-surface-container-high', 'text-primary', 'border-b-2', 'border-primary');
+        el.classList.add('text-on-surface-variant');
+      });
+
+      const activeView = document.getElementById(`view-${tabId}`);
+      if (activeView) activeView.classList.add('active');
+
+      const activeBtn = document.getElementById(`tab-btn-${tabId}`);
+      if (activeBtn) {
+        activeBtn.classList.add('active', 'bg-surface-container-high', 'text-primary', 'border-b-2', 'border-primary');
+        activeBtn.classList.remove('text-on-surface-variant');
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
